@@ -44,19 +44,21 @@ import qualified Data.Map as M
 
 -- Config {{{
 -- Define Terminal
-myTerminal      = "urxvt"
+myTerminal      = "urxvt -tr -sh 85"
+-- myTerminal      = "uxterm"
 -- Define modMask
 modMask' :: KeyMask
 modMask' = mod4Mask
 -- Define workspaces
 myWorkspaces    = ["1:main","2:web","3:read","4:torrent","5:music", "6:video", "7:misc"]
 -- Dzen/Conky
-myXmonadBar = "dzen2 -x '0' -y '0' -h '24' -w '721' -ta 'l' -fg '#FFFFFF' -bg '#1B1D1E'"
-myStatusBar = "conky -c /home/crooney/.xmonad/.conky_dzen | dzen2 -x '721' -w '720' -h '24' -ta 'r' -bg '#1B1D1E' -fg '#FFFFFF' -y '0'"
+myXmonadBar = "dzen2 -x '0' -y '0' -h '24' -w '721' -ta 'l' -fg '#FFFFFF' -bg '#1B1D1E' -fn '" ++ xftFont ++ "'"
+myStatusBar = "conky -c /home/crooney/.xmonad/.conky_dzen | dzen2 -x '721' -w '720' -h '24' -ta 'r' -bg '#1B1D1E' -fg '#FFFFFF' -y '0' -fn '" ++ xftFont ++ "'"
 myHome="/home/crooney/"
 myBitmapsDir = myHome ++ ".xmonad/dzen2"
 myWallpaper = myHome ++ "wallpaper/swahilidark.png"
-myImageLoader = "xloadimage -onroot -fullscreen -gamma 2.0 -quiet "
+-- myImageLoader = "xloadimage -onroot -fullscreen -gamma 2.0 -quiet "
+myImageLoader = "feh --bg-scale "
 myScreensaver = "if ! ps -C xscreensaver >/dev/null; then xscreensaver -no-splash & sleep 2; fi; xscreensaver-command -lock "
 --}}}
 -- Main {{{
@@ -180,9 +182,12 @@ colorNormalBorder   = "#CCCCC6"
 colorFocusedBorder  = "#fd971f"
 
 
-barFont  = "terminus"
+barFont  = "xftFont"
+--barFont  = "terminus"
 barXFont = "Droid Sans:size=12"
-xftFont = "xft: Droid Sans-14"
+--xftFont = "xft: Droid Sans-14"
+xftFont = "xft: PragmataPro-12"
+--xftFont = "xft: Inconsolata-12"
 --}}}
 
 -- Prompt Config {{{
@@ -214,10 +219,10 @@ keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     , ((modMask .|. shiftMask,      xK_l        ), spawn "slock")
     -- Programs
     , ((0,                          xK_Print    ), spawn "scrot -e 'mv $f ~/screenshots/'")
-    , ((modMask,		    xK_o        ), spawn "chromium-browser")
+    , ((modMask,                    xK_o        ), spawn "chromium-browser")
     , ((modMask .|. shiftMask,      xK_o        ), spawn "firefox")
-    , ((modMask,                    xK_m        ), spawn "nautilus --no-desktop --browser")
-    , ((mod4Mask .|. shiftMask,     xK_z        ), spawn myScreensaver)
+    , ((modMask .|. shiftMask,      xK_f        ), spawn "thunar")
+    , ((modMask .|. shiftMask,     xK_z        ), spawn myScreensaver)
     --, ((modMask,                    xK_F5       ), spawn "amixer -q sset Master toggle")        -- XF86AudioMute
     , ((modMask,                    xK_F6       ), spawn "amixer -q sset Master 5%-")
     , ((modMask,                    xK_F7       ), spawn "amixer -q sset Master 5%+")
