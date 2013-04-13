@@ -96,7 +96,7 @@ manageHook' = (composeAll . concat $
     , [className    =? c            --> doCenterFloat       |   c   <- myFloats ] -- float my floats
     , [name         =? n            --> doCenterFloat       |   n   <- myNames  ] -- float my names
     , [isFullscreen                 --> myDoFullFloat                           ]
-    ]) 
+    ])
 
     where
 
@@ -125,8 +125,8 @@ manageHook' = (composeAll . concat $
 myDoFullFloat :: ManageHook
 myDoFullFloat = doF W.focusDown <+> doFullFloat
 -- }}}
-layoutHook'  =  onWorkspaces ["1:main","5:music"] customLayout $ 
-                onWorkspaces ["6:gimp"] gimpLayout $ 
+layoutHook'  =  onWorkspaces ["1:main","5:music"] customLayout $
+                onWorkspaces ["6:gimp"] gimpLayout $
                 onWorkspaces ["4:chat"] imLayout $
                 customLayout2
 
@@ -166,7 +166,7 @@ gimpLayout  = avoidStruts $ withIM (0.11) (Role "gimp-toolbox") $
               reflectHoriz $
               withIM (0.15) (Role "gimp-dock") Full
 
-imLayout    = avoidStruts $ withIM (1%5) (Or (Title "Buddy List") (And (Resource "main") (ClassName "psi"))) Grid 
+imLayout    = avoidStruts $ withIM (1%5) (Or (Title "Buddy List") (And (Resource "main") (ClassName "psi"))) Grid
 --}}}
 -- Theme {{{
 -- Color names are easier to remember:
@@ -177,7 +177,7 @@ colorGreen          = "#A6E22E"
 colorBlue           = "#66D9EF"
 colorYellow         = "#E6DB74"
 colorWhite          = "#CCCCC6"
- 
+
 colorNormalBorder   = "#CCCCC6"
 colorFocusedBorder  = "#fd971f"
 
@@ -202,7 +202,7 @@ mXPConfig =
                     , height                = 14
                     , historyFilter         = deleteConsecutive
                     }
- 
+
 -- Run or Raise Menu
 largeXPConfig :: XPConfig
 largeXPConfig = mXPConfig
@@ -219,16 +219,16 @@ keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     , ((modMask .|. shiftMask,      xK_l        ), spawn "slock")
     -- Programs
     , ((0,                          xK_Print    ), spawn "scrot -e 'mv $f ~/screenshots/'")
-    , ((modMask,                    xK_o        ), spawn "chromium-browser")
-    , ((modMask .|. shiftMask,      xK_o        ), spawn "firefox")
+    , ((modMask .|. shiftMask,      xK_o        ), spawn "chromium-browser")
+    , ((modMask,                    xK_o        ), spawn "firefox")
     , ((modMask .|. shiftMask,      xK_f        ), spawn "thunar")
     , ((modMask .|. shiftMask,     xK_z        ), spawn myScreensaver)
     --, ((modMask,                    xK_F5       ), spawn "amixer -q sset Master toggle")        -- XF86AudioMute
     , ((modMask,                    xK_F6       ), spawn "amixer -q sset Master 5%-")
     , ((modMask,                    xK_F7       ), spawn "amixer -q sset Master 5%+")
-    , ((modMask,                    xK_F9       ), spawn "exaile --play-pause")
-    , ((modMask,                    xK_F10      ), spawn "exaile --prev")
-    , ((modMask,                    xK_F11      ), spawn "exaile --next")
+    , ((modMask,                    xK_F9       ), spawn "cmus-remote -u")
+    , ((modMask,                    xK_F10      ), spawn "cmus-remote -r")
+    , ((modMask,                    xK_F11      ), spawn "cmus-remote -n")
 
     -- layouts
     , ((modMask,                    xK_space    ), sendMessage NextLayout)
@@ -253,10 +253,10 @@ keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     , ((modMask .|. shiftMask,     xK_Right     ), shiftToNext)
     , ((modMask .|. controlMask,   xK_Left      ), prevWS)
     , ((modMask .|. shiftMask,     xK_Left      ), shiftToPrev)
-    
+
     -- quit, or restart
     , ((modMask .|. shiftMask,      xK_q        ), io (exitWith ExitSuccess))
-    , ((modMask,                    xK_q        ), spawn $ myHome ++ ".cabal/bin/xmonad --recompile && " 
+    , ((modMask,                    xK_q        ), spawn $ myHome ++ ".cabal/bin/xmonad --recompile && "
                                                    ++ myHome ++".cabal/bin/xmonad --restart")
     ]
     ++
