@@ -45,17 +45,12 @@ import qualified Data.Map as M
 -- Config {{{
 -- Define Terminal
 myTerminal      = "urxvt -tr -sh 85"
--- myTerminal      = "uxterm"
 -- Define modMask
 modMask' :: KeyMask
 modMask' = mod4Mask
 -- Define workspaces
 myWorkspaces    = ["1:main","2:web","3:read","4:torrent","5:music", "6:video", "7:misc"]
--- Dzen/Conky
-myXmonadBar = "dzen2 -x '0' -y '0' -h '24' -w '721' -ta 'l' -fg '#FFFFFF' -bg '#1B1D1E' -fn '" ++ xftFont ++ "'"
-myStatusBar = "conky -c /home/crooney/.xmonad/.conky_dzen | dzen2 -x '721' -w '720' -h '24' -ta 'r' -bg '#1B1D1E' -fg '#FFFFFF' -y '0' -fn '" ++ xftFont ++ "'"
 myHome="/home/crooney/"
-myBitmapsDir = myHome ++ ".xmonad/dzen2"
 myWallpaper = myHome ++ "wallpaper/swahilidark.png"
 -- myImageLoader = "xloadimage -onroot -fullscreen -gamma 2.0 -quiet "
 myImageLoader = "feh --bg-scale "
@@ -64,8 +59,6 @@ myScreensaver = "if ! ps -C xscreensaver >/dev/null; then xscreensaver -no-splas
 -- Main {{{
 main = do
     spawn $ myImageLoader ++ myWallpaper
-    dzenLeftBar <- spawnPipe myXmonadBar
-    dzenRightBar <- spawnPipe myStatusBar
     xmonad $ withUrgencyHookC dzenUrgencyHook { args = ["-bg", "red", "fg", "black", "-xs", "1", "-y", "25"] } urgencyConfig { remindWhen = Every 15 } $ defaultConfig
       { terminal            = myTerminal
       , workspaces          = myWorkspaces
@@ -73,7 +66,6 @@ main = do
       , modMask             = modMask'
       , layoutHook          = layoutHook'
       , manageHook          = manageHook'
-      , logHook             = myLogHook dzenLeftBar >> fadeInactiveLogHook 0xdddddddd
       , normalBorderColor   = colorNormalBorder
       , focusedBorderColor  = colorFocusedBorder
       , borderWidth         = 2
@@ -90,7 +82,7 @@ manageHook' = (composeAll . concat $
     , [className    =? c            --> doShift  "1:main"   |   c   <- myDev    ] -- move dev to main
     , [className    =? c            --> doShift  "2:web"    |   c   <- myWebs   ] -- move webs to main
     , [className    =? c            --> doShift  "3:read"   |   c   <- myVim    ] -- move books/comics to main
-    , [className    =? c            --> doShift	 "4:torrent"|   c   <- myTorrent] -- move torrent to torrent
+    , [className    =? c            --> doShift  "4:torrent"|   c   <- myTorrent] -- move torrent to torrent
     , [className    =? c            --> doShift  "5:music"  |   c   <- myMusic  ] -- move music to music
     , [className    =? c            --> doShift  "6:video"  |   c   <- myMovie  ] -- move img to div
     , [className    =? c            --> doCenterFloat       |   c   <- myFloats ] -- float my floats
@@ -129,29 +121,6 @@ layoutHook'  =  onWorkspaces ["1:main","5:music"] customLayout $
                 onWorkspaces ["6:gimp"] gimpLayout $
                 onWorkspaces ["4:chat"] imLayout $
                 customLayout2
-
---Bar
-myLogHook :: Handle -> X ()
-myLogHook h = dynamicLogWithPP $ defaultPP
-    {
-        ppCurrent           =   dzenColor "#ebac54" "#1B1D1E" -- . pad
-      , ppVisible           =   dzenColor "white" "#1B1D1E" -- . pad
-      , ppHidden            =   dzenColor "white" "#1B1D1E" -- . pad
-      , ppHiddenNoWindows   =   dzenColor "#7b7b7b" "#1B1D1E" -- . pad
-      , ppUrgent            =   dzenColor "black" "red" -- . pad
-      , ppWsSep             =   " "
-      , ppSep               =   " | "
-      , ppLayout            =   dzenColor "#ebac54" "#1B1D1E" .
-                                (\x -> case x of
-                                    "ResizableTall"             ->      "^i(" ++ myBitmapsDir ++ "/tall.xbm)"
-                                    "Mirror ResizableTall"      ->      "^i(" ++ myBitmapsDir ++ "/mtall.xbm)"
-                                    "Full"                      ->      "^i(" ++ myBitmapsDir ++ "/full.xbm)"
-                                    "Simple Float"              ->      "~"
-                                    _                           ->      x
-                                )
-      , ppTitle             =   (" " ++) . dzenColor "white" "#1B1D1E" . dzenEscape
-      , ppOutput            =   hPutStrLn h
-    }
 
 -- Layout
 customLayout = avoidStruts $ tiled ||| Mirror tiled ||| Full ||| simpleFloat
