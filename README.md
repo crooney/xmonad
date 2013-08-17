@@ -1,3 +1,16 @@
+Notice
+======
+
+Moved to crooney/dotfiles any updates will occur there.
+
+I've gone naked: no bars, no mouse niceties.
+
+Got solarized banging with tmux, vim and urxvt, if you care.
+
+Hansen brothers contemplating "Old time hockey, like Gordie Howe."
+
+cheers
+
 xmonad configuration
 ====================
 
